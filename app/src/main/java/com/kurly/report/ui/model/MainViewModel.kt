@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kurly.report.data.model.Section
 import com.kurly.report.data.repository.KurlyRepository
 import com.kurly.report.data.repository.PrefRepository
+import com.kurly.report.ui.SendUserNotification
 import com.kurly.report.ui.uimodel.*
 import com.kurly.report.utils.logD
 import com.kurly.report.utils.onSuspendFailure
@@ -14,6 +15,8 @@ import com.kurly.report.utils.recyclerview.diffutil.HashCodeDiffUtils
 import com.kurly.report.utils.recyclerview.state.ListRecyclerViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -32,6 +35,9 @@ class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val recyclerViewState = ListRecyclerViewState(HashCodeDiffUtils())
+
+    private val _showUserNotification = MutableSharedFlow<SendUserNotification>()
+    val showUserNotification = _showUserNotification.asSharedFlow()
 
     private var requestProductsJob: Job? = null
     private var currentSectionIndex: Int? = 1
@@ -68,6 +74,9 @@ class MainViewModel @Inject constructor(
                             createSectionUIModel(it.data)
                         }.onSuspendFailure {
                             logD("onSuspendFailure : $it")
+                            viewModelScope.launch {
+                                _showUserNotification.emit(SendUserNotification.Toast(it.message))
+                            }
                         }
                 }
             } ?: return
@@ -106,6 +115,9 @@ class MainViewModel @Inject constructor(
                         recyclerViewState.submitList(result)
                     }.onSuspendFailure {
                         logD("onSuspendFailure : $it")
+                        viewModelScope.launch {
+                            _showUserNotification.emit(SendUserNotification.Toast(it.message))
+                        }
                     }
             }
         }

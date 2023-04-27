@@ -3,6 +3,7 @@ package com.kurly.report.utils
 import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
@@ -51,6 +52,22 @@ fun View.findLifecycleOwner(): LifecycleOwner? {
     return this.findFragmentOrNull()?.viewLifecycleOwner ?: findActivityOrNull()
 }
 
+fun LifecycleOwner.repeatOnStarted(block: suspend CoroutineScope.() -> Unit) {
+    lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED, block)
+    }
+}
+
+fun <T> LifecycleOwner.collectLatest(flow: Flow<T>, block: (T) -> Unit) {
+    lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collectLatest {
+                block(it)
+            }
+        }
+    }
+}
+
 suspend fun <T> APIResult<T>.onSuspendOnSuccess(block: suspend (T) -> Unit): APIResult<T> {
     if (this is APIResult.Success) {
         block(data)
@@ -80,3 +97,6 @@ fun Context.dpToPx(dp: Int): Float {
 }
 
 fun Context.displayWidth(): Int = resources.displayMetrics.widthPixels
+
+
+fun Context.showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
