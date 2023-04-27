@@ -51,32 +51,18 @@ fun View.findLifecycleOwner(): LifecycleOwner? {
     return this.findFragmentOrNull()?.viewLifecycleOwner ?: findActivityOrNull()
 }
 
-fun LifecycleOwner.repeatOnStarted(block: suspend CoroutineScope.() -> Unit) {
-    lifecycleScope.launch {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED, block)
-    }
-}
-
-fun <T> LifecycleOwner.collectLatest(flow: Flow<T>, block: (T) -> Unit) {
-    lifecycleScope.launch {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            flow.collectLatest {
-                block(it)
-            }
-        }
-    }
-}
-
-suspend fun <T> APIResult<T>.onSuspendOnSuccess(block: suspend (T) -> Unit) {
+suspend fun <T> APIResult<T>.onSuspendOnSuccess(block: suspend (T) -> Unit): APIResult<T> {
     if (this is APIResult.Success) {
         block(data)
     }
+    return this
 }
 
-suspend fun <T> APIResult<T>.onFailure(block: suspend (APIResult.Failure) -> Unit) {
+suspend fun <T> APIResult<T>.onSuspendFailure(block: suspend (APIResult.Failure) -> Unit): APIResult<T> {
     if (this is APIResult.Failure) {
         block(this)
     }
+    return this
 }
 
 fun <T> APIResult<T>.toFlow(): Flow<T> {

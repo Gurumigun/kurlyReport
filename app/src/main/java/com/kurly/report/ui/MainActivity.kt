@@ -25,10 +25,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ActivityMainBinding.initView() {
+        pullToRefresh.setOnRefreshListener {
+            pullToRefresh.isRefreshing = false
+            mainViewModel.refresh()
+        }
         recyclerView.layoutManager?.let {
             val endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(it) {
                 override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                    mainViewModel.requestNextSection()
+                    mainViewModel.requestSection()
                 }
             }
             recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener)

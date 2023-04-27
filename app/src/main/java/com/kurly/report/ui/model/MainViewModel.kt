@@ -8,6 +8,7 @@ import com.kurly.report.data.repository.KurlyRepository
 import com.kurly.report.data.repository.PrefRepository
 import com.kurly.report.ui.uimodel.*
 import com.kurly.report.utils.logD
+import com.kurly.report.utils.onSuspendFailure
 import com.kurly.report.utils.onSuspendOnSuccess
 import com.kurly.report.utils.recyclerview.diffutil.HashCodeDiffUtils
 import com.kurly.report.utils.recyclerview.state.ListRecyclerViewState
@@ -23,6 +24,7 @@ import javax.inject.Inject
  * Date : 2023/04/26
  */
 private const val SAVE_STATE_INDEX = "SAVE_STATE_INDEX"
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val kurlyRepository: KurlyRepository,
@@ -39,7 +41,7 @@ class MainViewModel @Inject constructor(
             field = value
         }
 
-    private val likeAction : (ProductBase) -> Unit = {
+    private val likeAction: (ProductBase) -> Unit = {
         logD("likeAction : $it")
         viewModelScope.launch {
             val isReadyLike = prefRepository.isLikeProduct(it.data)
@@ -56,19 +58,24 @@ class MainViewModel @Inject constructor(
         requestSection()
     }
 
-    private fun requestSection() {
-        currentSectionIndex?.also {page ->
-            requestProductsJob = viewModelScope.launch {
-                kurlyRepository.getSections(page)
-                    .onSuspendOnSuccess {
-                        currentSectionIndex = it.page?.nextPage
-                        createSectionUIModel(it.data)
-                    }
-            }
-        } ?: return
+    fun requestSection() {
+        if (requestProductsJob == null || requestProductsJob?.isCompleted == true) {
+            currentSectionIndex?.also { page ->
+                requestProductsJob = viewModelScope.launch {
+                    kurlyRepository.getSections(page)
+                        .onSuspendOnSuccess {
+                            currentSectionIndex = it.page?.nextPage
+                            createSectionUIModel(it.data)
+                        }.onSuspendFailure {
+                            logD("onSuspendFailure : $it")
+                        }
+                }
+            } ?: return
+        }
     }
 
-    private suspend fun createSectionUIModel(list: List<Section>) = withContext(viewModelScope.coroutineContext) {
+    private suspend fun createSectionUIModel(list: List<Section>) =
+        withContext(viewModelScope.coroutineContext) {
             list.forEach { section ->
                 kurlyRepository.getSectionsProducts(section.id)
                     .onSuspendOnSuccess {
@@ -85,7 +92,7 @@ class MainViewModel @Inject constructor(
                         })
                         when (section.type) {
                             "grid" -> result.add(GridProductUIModel(list))
-                            "horizontal" ->  result.add(HorizontalListUIModel(list))
+                            "horizontal" -> result.add(HorizontalListUIModel(list))
                             "vertical" -> result.addAll(it.data.map {
                                 VerticalProductUIModel(
                                     it,
@@ -97,13 +104,15 @@ class MainViewModel @Inject constructor(
                         }
 
                         recyclerViewState.submitList(result)
+                    }.onSuspendFailure {
+                        logD("onSuspendFailure : $it")
                     }
             }
         }
 
-    fun requestNextSection() {
-        if (requestProductsJob?.isCompleted == true) {
-            requestSection()
-        }
+    fun refresh() {
+        currentSectionIndex = 1
+        recyclerViewState.submitList(null)
+        requestSection()
     }
 }
