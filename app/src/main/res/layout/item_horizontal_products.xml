@@ -6,7 +6,7 @@
 
         <variable
             name="uiModel"
-            type="com.kurly.report.ui.uimodel.VerticalProductUIModel" />
+            type="com.kurly.report.ui.uimodel.HorizontalProductUIModel" />
 
         <variable
             name="itemPosition"
@@ -14,66 +14,56 @@
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="7dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/productImageContainer"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="6:4"
+            <ImageView
+                android:id="@+id/productImage"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                app:bindLoadImgWithUrl="@{uiModel.data.image}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@color/material_dynamic_neutral60" />
 
-                <ImageView
-                    android:id="@+id/productImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:bindLoadImgWithUrl="@{uiModel.data.image}"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@color/material_dynamic_neutral60" />
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/selector_heart"
-                    app:layout_constraintRight_toRightOf="@id/productImage"
-                    app:layout_constraintTop_toTopOf="@id/productImage" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/selector_heart"
+                app:layout_constraintRight_toRightOf="@id/productImage"
+                app:layout_constraintTop_toTopOf="@id/productImage" />
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
+                android:minLines="2"
                 android:text="@{uiModel.data.name}"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="@id/productImageContainer"
-                app:layout_constraintTop_toBottomOf="@id/productImageContainer"
+                app:layout_constraintLeft_toLeftOf="@id/productImage"
+                app:layout_constraintRight_toRightOf="@id/productImage"
+                app:layout_constraintTop_toBottomOf="@id/productImage"
                 tools:text="@string/testText" />
 
             <TextView
                 android:id="@+id/price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -81,7 +71,8 @@
                 android:textStyle="bold"
                 app:bindDiscountedPrice="@{uiModel.data.discountedPrice}"
                 app:bindOriginalPrice="@{uiModel.data.originalPrice}"
-                app:layout_constraintLeft_toLeftOf="@id/productImageContainer"
+                app:layout_constraintLeft_toLeftOf="@id/productImage"
+                app:layout_constraintRight_toRightOf="@id/productImage"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 tools:text="@string/testText" />
 
@@ -90,9 +81,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:bindStrikePrice="@{uiModel.data.originalPrice}"
-                app:layout_constraintBottom_toBottomOf=""
-                app:layout_constraintLeft_toRightOf="@id/price"
-                app:layout_constraintTop_toTopOf="@id/price"
+                app:layout_constraintLeft_toLeftOf="@id/productImage"
+                app:layout_constraintRight_toRightOf="@id/productImage"
+                app:layout_constraintTop_toBottomOf="@id/price"
                 tools:text="@string/testText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

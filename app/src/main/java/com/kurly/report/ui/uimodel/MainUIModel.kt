@@ -4,6 +4,7 @@ import com.kurly.report.BR
 import com.kurly.report.R
 import com.kurly.report.data.model.Products
 import com.kurly.report.utils.recyclerview.RecyclerViewBindingModel
+import com.kurly.report.utils.recyclerview.state.ListRecyclerViewState
 
 /**
  *
@@ -19,9 +20,25 @@ data class SectionUIModel(
 }
 
 data class VerticalProductUIModel(
-    private val data: Products
+    val data: Products
 ) : RecyclerViewBindingModel {
     
     override fun bindingVariableId(): Int = BR.uiModel
     override fun layoutId(): Int = R.layout.item_vertical_products
+}
+
+data class HorizontalProductUIModel(
+    val data: Products
+) : RecyclerViewBindingModel {
+
+    override fun bindingVariableId(): Int = BR.uiModel
+    override fun layoutId(): Int = R.layout.item_horizontal_products
+}
+
+data class GridProductUIModel(
+    val recyclerViewState: ListRecyclerViewState<RecyclerViewBindingModel>
+) : RecyclerViewBindingModel {
+
+    override fun bindingVariableId(): Int = BR.uiModel
+    override fun layoutId(): Int = R.layout.item_grid_list
 }
