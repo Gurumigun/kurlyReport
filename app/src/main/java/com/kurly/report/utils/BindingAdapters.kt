@@ -22,7 +22,7 @@ import coil.load
 fun TextView.setDiscountPrice(originalPrice: Int, discountedPrice: Int? = null) {
     this.text = discountedPrice?.let {
         val persent = "${(((originalPrice - it) / originalPrice.toFloat()) * 100).toInt()}%"
-        SpannableString("$persent ${originalPrice}원").apply {
+        SpannableString("$persent ${discountedPrice}원").apply {
             setSpan(ForegroundColorSpan(Color.parseColor("#FA622F")), (0), persent.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     } ?: run {
@@ -46,4 +46,9 @@ fun ImageView.loadUrl(url: String?) {
 @BindingAdapter("changeSelected")
 fun View.changeSelected(isSelected: Boolean) {
     this.isSelected = isSelected
+}
+
+@BindingAdapter("isVisibleOrGone")
+fun View.isVisibleOrGone(isVisible: Boolean) {
+    this.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
