@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -20,7 +21,7 @@ import coil.load
 @BindingAdapter("bindOriginalPrice", "bindDiscountedPrice", requireAll = false)
 fun TextView.setDiscountPrice(originalPrice: Int, discountedPrice: Int? = null) {
     this.text = discountedPrice?.let {
-        val persent = "${((originalPrice - it) / originalPrice.toFloat()) * 100}%"
+        val persent = "${(((originalPrice - it) / originalPrice.toFloat()) * 100).toInt()}%"
         SpannableString("$persent ${originalPrice}원").apply {
             setSpan(ForegroundColorSpan(Color.parseColor("#FA622F")), (0), persent.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -31,7 +32,7 @@ fun TextView.setDiscountPrice(originalPrice: Int, discountedPrice: Int? = null) 
 
 @BindingAdapter("bindStrikePrice")
 fun TextView.setStrikePrice(originalPrice: Int) {
-    SpannableString("${originalPrice}원").apply {
+    this.text = SpannableString("${originalPrice}원").apply {
         setSpan(StrikethroughSpan(), 0, this.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 }
@@ -40,4 +41,9 @@ fun TextView.setStrikePrice(originalPrice: Int) {
 fun ImageView.loadUrl(url: String?) {
     url ?: return
     load(url)
+}
+
+@BindingAdapter("changeSelected")
+fun View.changeSelected(isSelected: Boolean) {
+    this.isSelected = isSelected
 }

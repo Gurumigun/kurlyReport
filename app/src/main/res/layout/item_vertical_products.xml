@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">
 
@@ -37,6 +38,7 @@
                 <ImageView
                     android:id="@+id/productImage"
                     android:layout_width="match_parent"
+                    android:onClick="@{() -> uiModel.likeAction.invoke(uiModel)}"
                     android:layout_height="match_parent"
                     app:bindLoadImgWithUrl="@{uiModel.data.image}"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -44,15 +46,17 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@color/material_dynamic_neutral60" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/selector_heart"
-                    app:layout_constraintRight_toRightOf="@id/productImage"
-                    app:layout_constraintTop_toTopOf="@id/productImage" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/selector_heart"
+                changeSelected="@{uiModel.isLike}"
+                app:layout_constraintRight_toRightOf="@id/productImageContainer"
+                app:layout_constraintTop_toTopOf="@id/productImageContainer" />
 
             <TextView
                 android:id="@+id/title"
@@ -89,8 +93,8 @@
                 android:id="@+id/originPrice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 app:bindStrikePrice="@{uiModel.data.originalPrice}"
-                app:layout_constraintBottom_toBottomOf=""
                 app:layout_constraintLeft_toRightOf="@id/price"
                 app:layout_constraintTop_toTopOf="@id/price"
                 tools:text="@string/testText" />

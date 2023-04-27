@@ -11,6 +11,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kurly.report.data.model.APIResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow

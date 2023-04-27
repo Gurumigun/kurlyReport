@@ -5,7 +5,9 @@ import com.google.gson.Gson
 import com.kurly.android.mockserver.MockInterceptor
 import com.kurly.report.data.KurlyAPI
 import com.kurly.report.data.repository.KurlyRepository
+import com.kurly.report.data.repository.PrefRepository
 import com.kurly.report.data.repository.impl.KurlyRepositoryImpl
+import com.kurly.report.data.repository.impl.PrefRepositoryImpl
 import com.kurly.report.utils.BASE_URL
 import dagger.Binds
 import dagger.Module
@@ -65,4 +67,7 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindKurlyRepository(repositoryImpl: KurlyRepositoryImpl): KurlyRepository
+    @Singleton
+    @Binds
+    abstract fun bindPrefRepository(repositoryImpl: PrefRepositoryImpl): PrefRepository
 }

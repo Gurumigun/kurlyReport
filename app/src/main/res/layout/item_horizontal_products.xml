@@ -14,14 +14,15 @@
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="320dp"
         android:padding="5dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp">
 
@@ -36,13 +37,15 @@
                 tools:src="@color/material_dynamic_neutral60" />
 
             <ImageView
+                changeSelected="@{uiModel.isLike}"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
+                android:onClick="@{() -> uiModel.likeAction.invoke(uiModel)}"
                 android:src="@drawable/selector_heart"
-                app:layout_constraintRight_toRightOf="@id/productImage"
-                app:layout_constraintTop_toTopOf="@id/productImage" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/title"
@@ -54,9 +57,10 @@
                 android:minLines="2"
                 android:text="@{uiModel.data.name}"
                 android:textColor="@color/black"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="@id/productImage"
-                app:layout_constraintRight_toRightOf="@id/productImage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/productImage"
                 tools:text="@string/testText" />
 
@@ -71,8 +75,8 @@
                 android:textStyle="bold"
                 app:bindDiscountedPrice="@{uiModel.data.discountedPrice}"
                 app:bindOriginalPrice="@{uiModel.data.originalPrice}"
-                app:layout_constraintLeft_toLeftOf="@id/productImage"
-                app:layout_constraintRight_toRightOf="@id/productImage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 tools:text="@string/testText" />
 
@@ -81,8 +85,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:bindStrikePrice="@{uiModel.data.originalPrice}"
-                app:layout_constraintLeft_toLeftOf="@id/productImage"
-                app:layout_constraintRight_toRightOf="@id/productImage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/price"
                 tools:text="@string/testText" />
         </androidx.constraintlayout.widget.ConstraintLayout>

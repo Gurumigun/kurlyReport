@@ -88,4 +88,20 @@ class ListRecyclerViewState<ITEM : RecyclerViewBindingModel>(val diffUtil: DiffU
             this.adapterDependency = adapterDependency
         }
     }
+
+    fun addItem(item : ITEM) {
+        handler.post {
+            submitList(getCurrentItems().toMutableList().apply {
+                add(item)
+            })
+        }
+    }
+
+    fun addItems(items : List<ITEM>) {
+        handler.post {
+            submitList(getCurrentItems().toMutableList().apply {
+                addAll(items)
+            })
+        }
+    }
 }

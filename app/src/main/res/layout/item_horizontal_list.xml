@@ -6,12 +6,12 @@
 
         <variable
             name="uiModel"
-            type="com.kurly.report.ui.uimodel.GridProductUIModel" />
+            type="com.kurly.report.ui.uimodel.HorizontalListUIModel" />
     </data>
 
     <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:list_recycler_view_state="@{uiModel.recyclerViewState}"

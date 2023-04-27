@@ -19,5 +19,5 @@ class HashCodeDiffUtils : DiffUtil.ItemCallback<RecyclerViewBindingModel>() {
     override fun areContentsTheSame(
         oldItem: RecyclerViewBindingModel,
         newItem: RecyclerViewBindingModel
-    ): Boolean = (oldItem == newItem)
+    ): Boolean = oldItem == newItem
 }

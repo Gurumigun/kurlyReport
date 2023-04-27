@@ -5,6 +5,7 @@ import com.kurly.report.R
 import com.kurly.report.data.model.Products
 import com.kurly.report.utils.recyclerview.RecyclerViewBindingModel
 import com.kurly.report.utils.recyclerview.state.ListRecyclerViewState
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  *
@@ -19,26 +20,42 @@ data class SectionUIModel(
     override fun layoutId(): Int = R.layout.item_section_title
 }
 
-data class VerticalProductUIModel(
-    val data: Products
-) : RecyclerViewBindingModel {
-    
+class VerticalProductUIModel(
+    _data: Products,
+    isLikeItem: Boolean,
+    val likeAction: (ProductBase) -> Unit
+) : ProductBase(_data, isLikeItem), RecyclerViewBindingModel {
     override fun bindingVariableId(): Int = BR.uiModel
     override fun layoutId(): Int = R.layout.item_vertical_products
 }
 
-data class HorizontalProductUIModel(
-    val data: Products
-) : RecyclerViewBindingModel {
 
+class HorizontalProductUIModel(
+    _data: Products,
+    isLikeItem: Boolean,
+    val likeAction: (ProductBase) -> Unit
+) : ProductBase(_data, isLikeItem), RecyclerViewBindingModel {
     override fun bindingVariableId(): Int = BR.uiModel
     override fun layoutId(): Int = R.layout.item_horizontal_products
+}
+
+open class ProductBase(val data: Products, isLikeItem: Boolean) {
+    val isLike = MutableStateFlow(false)
+    init {
+        isLike.value = isLikeItem
+    }
 }
 
 data class GridProductUIModel(
     val recyclerViewState: ListRecyclerViewState<RecyclerViewBindingModel>
 ) : RecyclerViewBindingModel {
-
     override fun bindingVariableId(): Int = BR.uiModel
     override fun layoutId(): Int = R.layout.item_grid_list
+}
+
+data class HorizontalListUIModel(
+    val recyclerViewState: ListRecyclerViewState<RecyclerViewBindingModel>
+) : RecyclerViewBindingModel {
+    override fun bindingVariableId(): Int = BR.uiModel
+    override fun layoutId(): Int = R.layout.item_horizontal_list
 }
